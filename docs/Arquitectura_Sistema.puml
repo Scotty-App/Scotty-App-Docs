@@ -1,0 +1,20 @@
+@startuml
+title Arquitectura del Sistema (3 Capas)
+
+node "Dispositivo Cliente" {
+    [Interfaz de Usuario] as UI
+}
+
+node "Servidor de Aplicaciones" {
+    [Lógica de Negocio] as Backend
+}
+
+database "Almacenamiento" {
+    [Base de Datos] as DB
+}
+
+UI -> Backend : Peticiones HTTP
+Backend -> DB : Consultas SQL
+DB -> Backend : Resultados
+Backend -> UI : Respuesta de datos
+@enduml
