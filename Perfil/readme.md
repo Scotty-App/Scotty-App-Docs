@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/banner.jpg" alt="Scotty App Banner" width="100%">
+  <img src="img/banner.png" alt="Scotty App Banner" width="100%">
 </p>
 
 <p align="center">
@@ -20,11 +20,11 @@
 <div align="center">
   <table>
     <tr>
-      <td align="center"><img src="img/avatar_manuela.png" width="100px"><br><b>Manuela</b></td>
-      <td align="center"><img src="img/avatar_ivan.png" width="100px"><br><b>Iván</b></td>
-      <td align="center"><img src="img/avatar paula.png" width="100px"><br><b>Paula</b></td>
-      <td align="center"><img src="img/avatar_jr.png" width="100px"><br><b>José Ramón</b></td>
-      <td align="center"><img src="img/avatar_jl.png" width="100px"><br><b>José Luis</b></td>
+      <td align="center"><img src="img/avatar_manuela_black.png" width="100px"><br><b>Manuela</b></td>
+      <td align="center"><img src="img/avatar_ivan_black.png" width="100px"><br><b>Iván</b></td>
+      <td align="center"><img src="img/avatar_paula_black.png" width="100px"><br><b>Paula</b></td>
+      <td align="center"><img src="img/avatar_jr_blck.png" width="100px"><br><b>José Ramón</b></td>
+      <td align="center"><img src="img/avatar_jl_blck.png" width="100px"><br><b>José Luis</b></td>
     </tr>
   </table>
 </div>
