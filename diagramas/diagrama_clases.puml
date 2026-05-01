@@ -1,8 +1,8 @@
 @startuml
 skinparam classAttributeIconSize 0
-skinparam classFontSize 13
-skinparam classBackgroundColor #EAF3DE
-skinparam classBorderColor #3B6D11
+skinparam classFontSize 12
+skinparam classBackgroundColor #f9f9f9
+skinparam classBorderColor #333333
 
 enum EstadoNivel {
   BLOQUEADO
@@ -15,114 +15,99 @@ abstract class Usuario {
   # nombre: String
   # email: String
   # contrasena: String
+  # sesionActiva: boolean
+  # fechaInicioSesion: Date
   + iniciarSesion(): void
   + cerrarSesion(): void
+  + validarCredenciales(): boolean
+  + verificarSesionActiva(): boolean
 }
 
 class Invitado {
   + verContenido(): void
-  + jugarRetoTemporal(): void
+  + jugarTemporal(nivel: Nivel): void
   + registrarse(): void
 }
 
 class Alumno {
   - xpTotal: int
-  - nivelRango: int
-  - tokensTotales: int
-  + jugarRetoConGuardado(reto: Reto): void
+  - saldo: int
+  - nivelesCompletados: List<Integer>
+  + jugar(nivel: Nivel): void
   + editarPerfil(): void
-  + verProgreso(): void
-  + consultarRanking(): void
-  + canjearTokens(recompensa: Recompensa): void
   + ganarXP(puntos: int): void
-}
-
-class Profesor {
-  + crearReto(nivel: Nivel): Reto
-  + crearEquipo(nombre: String): Equipo
-  + asignarReto(equipo: Equipo, reto: Reto): void
-  + verProgresoAlumnos(equipo: Equipo): void
+  + canjearTokens(canje: Canje): void
+  + verificarSaldo(coste: int): boolean
+  + calcularProgreso(): double
 }
 
 class Administrador {
   + crearJuego(juego: Juego): void
+  + editarJuego(juego: Juego): void
   + eliminarJuego(juego: Juego): void
-  + crearNivel(nivel: Nivel): void
-  + gestionarUsuarios(): void
-  + moderarRanking(): void
+  + gestionarUsuario(usuario: Usuario): void
   + validarCanje(canje: Canje): void
+  + verificarPermisos(usuario: Usuario): boolean
 }
 
 class Juego {
   - id: int
   - titulo: String
-  - lenguaje: String
+  - descripcion: String
   - dificultad: String
   - activo: boolean
-  + agregarNivel(nivel: Nivel): void
-  + getNiveles(): List~Nivel~
+  - niveles: List<Nivel>
+  + getNiveles(): List<Nivel>
+  + verificarDisponibilidad(): boolean
 }
 
 class Nivel {
   - id: int
-  - titulo: String
   - orden: int
-  - xpRecompensa: int
-  - estadoNivel: EstadoNivel
-  + iniciar(): void
-  + finalizar(): void
-  + getRetos(): List~Reto~
-}
-
-class Reto {
-  - id: int
-  - enunciado: String
   - tipo: String
   - solucion: String
+  - puntosXP: int
+  - estado: EstadoNivel
   + validarRespuesta(respuesta: String): boolean
-}
-
-class Recompensa {
-  - id: int
-  - nombre: String
-  - costeTokens: int
-  - tipo: String
-  - activo: boolean
+  + verificarAcceso(): boolean
+  + desbloquearSiguiente(): void
 }
 
 class Canje {
   - id: int
+  - nombreRecompensa: String
+  - costeTokens: int
+  - tipoRecompensa: String
   - fechaSolicitud: Date
   - estado: String
   + validar(): void
   + rechazar(): void
+  + verificarDisponibilidad(): boolean
 }
 
-class Equipo {
-  - id: int
-  - nombre: String
-  + agregarAlumno(alumno: Alumno): void
-  + quitarAlumno(alumno: Alumno): void
-  + getAlumnos(): List~Alumno~
+class ScottyApp {
+  - {static} instancia: ScottyApp
+  + {static} getInstance(): ScottyApp
+  + main(args: String[]): void
+  + iniciarAplicacion(): void
+  + verificarConexionBD(): boolean
 }
 
-' ── HERENCIA ──
+Usuario <|-- Invitado
+Usuario <|-- Alumno
+Usuario <|-- Administrador
 
-Alumno -down-|> Invitado
-Invitado -down-|> Usuario
-Profesor -down-|> Alumno
-Administrador -left-|> Usuario
+Invitado "1" ..> "1" Alumno : se convierte en >
 
-' ── RELACIONES ──
-Juego "1" *-- "1..*" Nivel : contiene
-Nivel "1" *-- "1..*" Reto : incluye
-Nivel -- EstadoNivel : usa
-Alumno "0..*" -right- "0..*" Reto : juega
-Alumno "1" -- "0..*" Canje : solicita
-Recompensa "1" -- "0..*" Canje : en
-Administrador "1" -- "0..*" Canje : valida
-Administrador "1" -- "0..*" Juego : gestiona
-Profesor "1" *-- "0..*" Equipo : gestiona
-Equipo "0..*" o-- "0..*" Alumno : agrupa
+ScottyApp "1" --> "1" Usuario : gestiona sesion >
+
+Alumno "1" -- "0..*" Canje : canjea >
+Alumno "0..*" -- "0..*" Nivel : completa >
+
+Administrador "1" -- "0..*" Canje : gestiona >
+Administrador "1" -- "0..*" Juego : administra >
+
+Juego "1" *-- "1..*" Nivel : contiene >
+Nivel -- EstadoNivel : usa >
 
 @enduml
